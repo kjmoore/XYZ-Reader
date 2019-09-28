@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import com.example.xyzreader.databinding.ArticleItemBinding;
 import com.example.xyzreader.model.Article;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ArticleListRecyclerView extends RecyclerView.Adapter<ArticleListRecyclerView.ArticleListViewHolder> {
-    private static final String TAG = ArticleListRecyclerView.class.getSimpleName();
+    private final String TAG = ArticleListRecyclerView.class.getSimpleName();
 
     private List<Article> articles = Collections.emptyList();
 
@@ -39,7 +40,9 @@ public class ArticleListRecyclerView extends RecyclerView.Adapter<ArticleListRec
 
     void setArticles(List<Article> articles) {
         Log.d(TAG, "Updating articles");
+        Log.v(TAG, Arrays.toString(articles.toArray()));
         this.articles = articles;
+        this.notifyDataSetChanged();
     }
 
     class ArticleListViewHolder extends RecyclerView.ViewHolder {
