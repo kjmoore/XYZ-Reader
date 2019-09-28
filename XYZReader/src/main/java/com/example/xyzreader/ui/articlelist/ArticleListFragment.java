@@ -23,8 +23,10 @@ import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class ArticleListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ArticleListFragment extends Fragment
+        implements LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = ArticleListRecyclerView.class.getSimpleName();
 
     private final ArticleListRecyclerView articleListRecyclerView = new ArticleListRecyclerView();
@@ -40,6 +42,8 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         final GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
         viewBinding.recyclerView.setLayoutManager(layoutManager);
         viewBinding.recyclerView.setAdapter(articleListRecyclerView);
+
+        viewBinding.swipeRefresh.setOnRefreshListener(this);
 
         LoaderManager.getInstance(this).initLoader(0, null, this);
 
@@ -58,7 +62,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         Log.d(TAG, "Finished loading data");
         final List<Article> articleList = new ArrayList<>();
         data.moveToPosition(0);
-        Log.v(TAG, "" + data.getCount());
+        Log.v(TAG, "Received " + data.getCount() + " articles");
         while (!data.isAfterLast()) {
             final Article article = new Article();
             article.author = data.getString(ArticleLoader.Query.AUTHOR);
@@ -73,6 +77,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
 
         articleListRecyclerView.setArticles(articleList);
         viewBinding.progressBar.setVisibility(View.INVISIBLE);
+        viewBinding.swipeRefresh.setRefreshing(false);
     }
 
     @Override
@@ -80,5 +85,10 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         Log.d(TAG, "Loader reset");
         articleListRecyclerView.setArticles(Collections.emptyList());
         articleListRecyclerView.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRefresh() {
+        LoaderManager.getInstance(this).initLoader(0, null, this);
     }
 }
