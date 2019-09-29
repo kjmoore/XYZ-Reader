@@ -9,8 +9,7 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="margin_small">4dp</dimen>
-    <dimen name="logo_height">150dp</dimen>
-    <dimen name="topbar_elevation">4dp</dimen>
+    <dimen name="top_bar_elevation">4dp</dimen>
     <item name="detail_body_line_spacing_multiplier" format="float" type="fraction">1.25</item>
 
 </resources>
