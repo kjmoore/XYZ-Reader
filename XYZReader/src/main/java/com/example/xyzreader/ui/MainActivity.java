@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentTransaction.addToBackStack(null);
         
-        if (!isTabletMode) {
+        if (isTabletMode) {
             mainBinding.selectArticle.setVisibility(View.INVISIBLE);
         }
         fragmentTransaction.commit();
