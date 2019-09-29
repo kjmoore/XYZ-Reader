@@ -1,17 +1,21 @@
 package com.example.xyzreader.ui.articlelist;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.xyzreader.databinding.ArticleItemBinding;
 import com.example.xyzreader.model.Article;
+import com.example.xyzreader.ui.MainActivity;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ArticleListRecyclerView extends RecyclerView.Adapter<ArticleListRecyclerView.ArticleListViewHolder> {
@@ -45,19 +49,29 @@ public class ArticleListRecyclerView extends RecyclerView.Adapter<ArticleListRec
         this.notifyDataSetChanged();
     }
 
-    class ArticleListViewHolder extends RecyclerView.ViewHolder {
+    class ArticleListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ArticleItemBinding binding;
         Article article;
 
         ArticleListViewHolder(ArticleItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            binding.getRoot().setOnClickListener(this);
         }
 
         private void bind(@NonNull final Article article) {
             this.article = article;
             binding.setArticle(article);
             binding.executePendingBindings();
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "Clicked: " + article.title);
+
+            final Intent intent = new Intent(MainActivity.VIEW_ARTICLE);
+            intent.putExtra(MainActivity.ARTICLE_SELECTED, article);
+            LocalBroadcastManager.getInstance(v.getContext()).sendBroadcast(intent);
         }
     }
 }
