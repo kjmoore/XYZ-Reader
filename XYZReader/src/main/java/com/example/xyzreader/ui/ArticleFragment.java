@@ -36,12 +36,14 @@ public class ArticleFragment extends Fragment {
             Log.e(TAG, "No article found");
         }
 
-        final AppCompatActivity mainActivity = (AppCompatActivity) getActivity();
-        if (mainActivity != null) {
-            mainActivity.setSupportActionBar(viewBinding.toolbar);
-            final ActionBar supportActionBar = mainActivity.getSupportActionBar();
-            if (supportActionBar != null) {
-                supportActionBar.setDisplayHomeAsUpEnabled(true);
+        if (!this.getResources().getBoolean(R.bool.tablet_mode)) {
+            final AppCompatActivity mainActivity = (AppCompatActivity) getActivity();
+            if (mainActivity != null) {
+                mainActivity.setSupportActionBar(viewBinding.toolbar);
+                final ActionBar supportActionBar = mainActivity.getSupportActionBar();
+                if (supportActionBar != null) {
+                    supportActionBar.setDisplayHomeAsUpEnabled(true);
+                }
             }
         }
 

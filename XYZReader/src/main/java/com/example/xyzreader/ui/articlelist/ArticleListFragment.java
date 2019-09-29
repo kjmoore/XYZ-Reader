@@ -1,5 +1,6 @@
 package com.example.xyzreader.ui.articlelist;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,15 +42,19 @@ public class ArticleListFragment extends Fragment
         Log.d(TAG, "Starting article list fragment");
         viewBinding = DataBindingUtil.inflate(inflater, R.layout.article_list, container, false);
 
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        viewBinding.recyclerView.setLayoutManager(layoutManager);
-        viewBinding.recyclerView.addItemDecoration(
-                new DividerItemDecoration(container.getContext(), layoutManager.getOrientation()));
-        viewBinding.recyclerView.setAdapter(articleListRecyclerView);
+        final Context context = getContext();
+        if (context != null) {
+            final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+            viewBinding.recyclerView.setLayoutManager(layoutManager);
+            viewBinding.recyclerView.addItemDecoration(
+                    new DividerItemDecoration(context, layoutManager.getOrientation()));
+            viewBinding.recyclerView.setAdapter(articleListRecyclerView);
 
-        viewBinding.swipeRefresh.setOnRefreshListener(this);
+            viewBinding.swipeRefresh.setOnRefreshListener(this);
 
-        LoaderManager.getInstance(this).initLoader(0, null, this);
+            LoaderManager.getInstance(this).initLoader(0, null, this);
+        }
+
 
         return viewBinding.getRoot();
     }

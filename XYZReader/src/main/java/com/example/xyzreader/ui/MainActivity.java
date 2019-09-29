@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.example.xyzreader.R;
+import com.example.xyzreader.databinding.ActivityMainBinding;
 import com.example.xyzreader.ui.articlelist.ArticleListFragment;
 
 import androidx.annotation.Nullable;
@@ -25,19 +27,29 @@ public class MainActivity extends AppCompatActivity {
     public static final String ARTICLE_SELECTED = "com.example.xyzreader.ARTICLE_SELECTED";
 
     private ArticleListFragment articleList = new ArticleListFragment();
-    private ArticleFragment article = new ArticleFragment();
+    private ActivityMainBinding mainBinding;
+
+    private boolean isTabletMode = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        isTabletMode = this.getResources().getBoolean(R.bool.tablet_mode);
 
         if (savedInstanceState == null) {
             Log.d(TAG, "Replacing fragment");
             // Do this manually on on-create so we don't end up with an extra step in the back stack
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_holder, articleList)
-                    .commit();
+            if (isTabletMode) {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.fragment_holder_master, articleList)
+                        .commit();
+            } else {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.fragment_holder, articleList)
+                        .commit();
+            }
         }
 
         final LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
@@ -55,9 +67,11 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentTransaction.replace(R.id.fragment_holder, fragment);
 
-//        if (!isTabletMode) {
-            fragmentTransaction.addToBackStack(null);
-//        }
+        fragmentTransaction.addToBackStack(null);
+        
+        if (!isTabletMode) {
+            mainBinding.selectArticle.setVisibility(View.INVISIBLE);
+        }
         fragmentTransaction.commit();
     }
 
@@ -69,8 +83,9 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "Navigation bundle: " + bundle);
 
         if (bundle != null) {
-            article.setArguments(bundle);
-            setFragment(article);
+            final Fragment fragment = new ArticleFragment();
+            fragment.setArguments(bundle);
+            setFragment(fragment);
         } else {
             Log.e(TAG, "There was no bundle, so couldn't move to article");
         }
@@ -90,5 +105,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             return super.onSupportNavigateUp();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        final LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
+        broadcastManager.unregisterReceiver(viewArticle);
     }
 }

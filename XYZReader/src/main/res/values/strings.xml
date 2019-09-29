@@ -8,5 +8,6 @@
     <string name="article_image">Article Image</string>
     <string name="content_description_app_logo">XYZ Reader Logo</string>
     <string name="unknown_date">Unknown</string>
+    <string name="select_article">Please select an article</string>
 
 </resources>
