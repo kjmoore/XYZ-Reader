@@ -22,7 +22,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class ArticleListFragment extends Fragment
@@ -39,8 +41,10 @@ public class ArticleListFragment extends Fragment
         Log.d(TAG, "Starting article list fragment");
         viewBinding = DataBindingUtil.inflate(inflater, R.layout.article_list, container, false);
 
-        final GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         viewBinding.recyclerView.setLayoutManager(layoutManager);
+        viewBinding.recyclerView.addItemDecoration(
+                new DividerItemDecoration(container.getContext(), layoutManager.getOrientation()));
         viewBinding.recyclerView.setAdapter(articleListRecyclerView);
 
         viewBinding.swipeRefresh.setOnRefreshListener(this);
