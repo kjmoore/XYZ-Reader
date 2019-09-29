@@ -12,6 +12,8 @@ import com.example.xyzreader.databinding.ArticleItemBinding;
 import com.example.xyzreader.model.Article;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
@@ -32,6 +34,15 @@ public class ArticleFragment extends Fragment {
             viewBinding.setArticle(article);
         } else {
             Log.e(TAG, "No article found");
+        }
+
+        final AppCompatActivity mainActivity = (AppCompatActivity) getActivity();
+        if (mainActivity != null) {
+            mainActivity.setSupportActionBar(viewBinding.toolbar);
+            final ActionBar supportActionBar = mainActivity.getSupportActionBar();
+            if (supportActionBar != null) {
+                supportActionBar.setDisplayHomeAsUpEnabled(true);
+            }
         }
 
         return viewBinding.getRoot();

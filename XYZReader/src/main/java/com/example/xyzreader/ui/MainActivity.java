@@ -77,4 +77,18 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
+
+    /**
+     * @return true if Up navigation completed successfully <b>and</b> this Activity was finished, false otherwise.
+     */
+    @Override
+    public boolean onSupportNavigateUp() {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack();
+            return false;
+        } else {
+            return super.onSupportNavigateUp();
+        }
+    }
 }
