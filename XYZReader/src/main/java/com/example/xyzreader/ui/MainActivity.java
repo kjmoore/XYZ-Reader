@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.xyzreader.R;
+import com.example.xyzreader.data.UpdaterService;
 import com.example.xyzreader.databinding.ActivityMainBinding;
 import com.example.xyzreader.ui.articlelist.ArticleListFragment;
 
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
             }
         }
+
+        startService(new Intent(this, UpdaterService.class));
 
         final LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
         broadcastManager.registerReceiver(viewArticle, new IntentFilter(VIEW_ARTICLE));
